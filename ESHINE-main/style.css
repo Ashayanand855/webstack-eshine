@@ -29,8 +29,8 @@ body {
 }
 
 .logo {
-    font-size: 60px;
-    letter-spacing: 6px;
+    font-size: 40px;
+    letter-spacing: 4px;
 }
 
 .nav-right span {
@@ -96,6 +96,16 @@ body {
 .buttons button:hover {
     background: black;
     color: white;
+}
+footer { 
+    background:#ba8c02; color:#eee; padding:30px 6%; margin-top:30px; display:flex; gap:28px; flex-wrap:wrap; 
+}
+.footer-col { 
+    min-width:180px; 
+}
+
+.footer a { 
+    color:#ddd; display:block; margin:6px 0; font-size:14px; 
 }
 
 /* Collection Section */
@@ -233,85 +243,4 @@ body {
 .info button {
     padding: 10px 25px;
     margin-top: 20px;
-}
-/* Newsletter */
-.newsletter-section {
-    padding: 80px 60px;
-    background: #ffffffe4;
-}
-
-.newsletter-section h2 {
-    font-size: 28px;
-    margin-bottom: 30px;
-}
-
-.newsletter-form {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 40px;
-}
-
-.newsletter-form input[type="email"] {
-    padding: 14px;
-    width: 300px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-.checkbox {
-    font-size: 14px;
-    color: #555;
-}
-
-.newsletter-form button {
-    padding: 14px 30px;
-    background: black;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.newsletter-form button:hover {
-    background: #333;
-}
-
-/* Contact Info */
-.contact-row {
-    display: flex;
-    gap: 80px;
-    font-size: 14px;
-}
-
-.contact-row h4 {
-    margin-bottom: 6px;
-}
-
-/* Footer */
-.footer {
-    background: #111;
-    color: white;
-    padding: 60px;
-}
-
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.footer h3 {
-    font-size: 22px;
-    margin-bottom: 10px;
-}
-
-.footer h4 {
-    margin-bottom: 10px;
-}
-
-.footer p {
-    font-size: 14px;
-    margin-bottom: 6px;
-    color: #ccc;
 }

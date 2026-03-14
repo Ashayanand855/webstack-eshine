@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Arrivals | E-SHINE</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f5f5f5;
+}
+
+/* Navbar */
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 40px;
+    background:black;
+    color:white;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    margin-right:20px;
+    font-size:16px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+/* Header */
+
+.header{
+    text-align:center;
+    padding:50px;
+    background:white;
+}
+
+.header h1{
+    font-size:40px;
+}
+
+/* Product Grid */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+    padding:40px;
+}
+
+/* Product Card */
+
+.card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+}
+
+.product-info{
+    padding:20px;
+    text-align:center;
+}
+
+.product-info h3{
+    margin:10px 0;
+}
+
+.price{
+    color:#e63946;
+    font-size:18px;
+    font-weight:bold;
+}
+
+button{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    background:black;
+    color:white;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+button:hover{
+    background:#e63946;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<div class="navbar">
+
+<div>
+<a href="home.html">Home</a>
+<a href="men.html">Men</a>
+<a href="women.html">Women</a>
+<a href="new arrival.html">New Arrivals</a>
+<a href="cart.html">Cart</a>
+</div>
+
+<div class="logo">
+E-SHINE
+</div>
+
+</div>
+
+
+<!-- Header -->
+
+<div class="header">
+<h1>🔥 New Arrivals</h1>
+<p>Discover the latest fashion trends</p>
+</div>
+
+
+<!-- Products -->
+
+<div class="products">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1520975916090-3105956dac38">
+<div class="product-info">
+<h3>Oversized Hoodie</h3>
+<p class="price">₹1299</p>
+<button onclick="addToCart('Oversized Hoodie', 1299, 'https://images.unsplash.com/photo-1520975916090-3105956dac38')">Add to Cart</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb">
+<div class="product-info">
+<h3>Street Style Jacket</h3>
+<p class="price">₹2499</p>
+<button onclick="addToCart('Street Style Jacket', 2499, 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb')">Add to Cart</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d">
+<div class="product-info">
+<h3>Classic Denim</h3>
+<p class="price">₹1799</p>
+<button onclick="addToCart('Classic Denim', 1799, 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d')">Add to Cart</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1519741497674-611481863552">
+<div class="product-info">
+<h3>Summer Dress</h3>
+<p class="price">₹1499</p>
+<button onclick="addToCart('Summer Dress', 1499, 'https://images.unsplash.com/photo-1519741497674-611481863552')">Add to Cart</button>
+</div>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
