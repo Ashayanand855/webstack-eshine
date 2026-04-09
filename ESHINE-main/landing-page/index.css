@@ -1107,6 +1107,12 @@
             height: 100%;
             object-fit: cover;
             object-position: top center;
+            filter: grayscale(100%) contrast(1.05);
+            transition: filter 0.35s ease;
+        }
+
+        .featured-banner:hover .featured-banner-img {
+            filter: grayscale(0%) contrast(1);
         }
 
         .featured-box {
