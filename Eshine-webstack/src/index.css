@@ -807,16 +807,15 @@ header {
 /* Featured Banner */
 .featured-banner {
     position: relative;
-    height: 640px;
+    height: 800px;
     margin-bottom: 80px;
-    overflow: hidden;
 }
 
 .featured-banner-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 24%;
+    object-position: top center;
     filter: grayscale(100%) contrast(1.05);
     transition: filter 0.35s ease;
 }
@@ -830,24 +829,25 @@ header {
     top: 50%;
     right: 60px;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
-    padding: 50px;
-    width: 323px;
+    background-color: var(--white);
+    padding: 50px 40px;
+    width: 330px;
     text-align: center;
 }
 
 .featured-box .cloth-name {
-    font-size: 14px;
-    margin-bottom: 15px;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .featured-box h2 {
-    font-size: 27px;
+    font-size: 32px;
     font-weight: 400;
     line-height: 1.2;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .featured-box .context {
