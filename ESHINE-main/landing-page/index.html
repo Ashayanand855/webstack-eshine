@@ -5,65 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eshine - Fashion E-commerce</title>
   <link rel="stylesheet" href="index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 </head>
 <body>
- 
-  <div class="top-bar">
-    <p>Eshine</p>
-  </div>
- 
-  <header>
-    <div class="container header-content">
-      <a href="index.html">
-        <img src="Eshine-Logo.png" alt="eshine" class="logo-img">
-      </a>
-      <nav class="nav-center">
-        <a href="../new arrival.html">New</a>
-        <a href="../men.html">Men</a>
-        <a href="../women.html">Women</a>
-        <a href="../jwell.html">Collections</a>
-        <a href="#">AI Stylist</a>
-      </nav>
-      <div class="nav-icons">
-        <a href="#" class="nav-icon-link" id="account-icon" title="Account">
-          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
-            <circle cx="12" cy="7" r="4"/>
-            <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
-          </svg>
-        </a>
-        <a href="../cart.html" class="nav-icon-link" id="cart-icon" title="Cart">
-          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
-            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-            <path d="M3 6h18"/>
-          </svg>
-          <span class="cart-count hidden">0</span>
-        </a>
-      </div>
-    </div>
-  </header>
- 
+
   <main>
-    <section class="hero">
-      <div class="hero-slider">
-        <img src="hover1.png" class="hero-img active">
-        <img src="hover2.jpg" class="hero-img">
-        <img src="hover3.webp" class="hero-img">
-      </div>
-      <div class="hero-overlay"></div>
-      <div class="hero-content-box">
-        <p class="brand">EShine</p>
-        <h1>New Arrivals 2025</h1>
-        <p class="description"></p>
-        <button class="btn-black">SHOP NOW</button>
-      </div>
-      <div class="hero-pagination">
-        <div class="pagination-bar active"></div>
-        <div class="pagination-bar"></div>
-        <div class="pagination-bar"></div>
+    <section class="editorial-landing">
+      <div class="editorial-shell">
+        <header class="editorial-topbar">
+          <a href="index.html" class="editorial-brand-link">E-SHINE</a>
+
+          <nav class="editorial-nav">
+            <a href="#editorial-story">About</a>
+            <a href="../men.html">Men</a>
+            <a href="../women.html">Women</a>
+            <a href="../jwell.html">Collection</a>
+            <a href="#footer-contact">Contact</a>
+          </nav>
+
+          <div class="editorial-actions">
+            <a href="#editorial-story" class="editorial-top-link">AI STUDIO <span>→</span></a>
+            <a href="#" class="nav-icon-link editorial-icon-link" id="account-icon" title="Account">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
+                <circle cx="12" cy="7" r="4"></circle>
+                <path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>
+              </svg>
+            </a>
+            <a href="../cart.html" class="nav-icon-link editorial-icon-link" id="cart-icon" title="Cart">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                <path d="M3 6h18"></path>
+              </svg>
+              <span class="cart-count hidden">0</span>
+            </a>
+          </div>
+        </header>
+
+        <div class="editorial-hero" id="editorial-story">
+          <div class="editorial-word">SH....INE</div>
+
+          <div class="editorial-copy editorial-panel editorial-panel-left editorial-interactive">
+            <p class="editorial-eyebrow">OUR CAMPAIGN</p>
+            <h2>👀</h2>
+            <p>Fashion that feels soft,modern.</p>
+          </div>
+
+          <div class="editorial-copy editorial-panel editorial-panel-right editorial-interactive">
+            <p class="editorial-eyebrow">FALL / WINTER 2026</p>
+            <h2>⛄️🍂</h2>
+            <p>Make you feel cozy...</p>
+          </div>
+
+          <div class="editorial-model-stack">
+            <article class="editorial-model-card editorial-back-card editorial-interactive">
+              <img
+                src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80"
+                alt="Fashion model"
+              >
+            </article>
+
+            <article class="editorial-model-card editorial-middle-card editorial-interactive">
+              <img
+                src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=80"
+                alt="Editorial portrait"
+              >
+            </article>
+
+            <article class="editorial-model-card editorial-front-card editorial-interactive">
+              <video
+                src="fashion-video.mp4"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label="Luxury campaign video portrait"
+              ></video>
+            </article>
+          </div>
+
+          <div class="editorial-mini editorial-panel editorial-score-card editorial-interactive">
+            <span class="editorial-mini-label">WEAR...</span>
+            <strong></strong>
+          </div>
+
+          <div class="editorial-mini editorial-panel editorial-category-card editorial-interactive">
+            <span class="editorial-mini-label">CATEGORY</span>
+            <p>That fit you</p>
+          </div>
+
+          <div class="editorial-mini editorial-panel editorial-ai-card editorial-interactive">
+            <span class="editorial-mini-label">AI SUGGESTION</span>
+            <strong></strong>
+          </div>
+        </div>
       </div>
     </section>
- 
+
     <section class="container section-padding">
       <div class="grid-3">
         <div class="product-card">
@@ -95,7 +133,7 @@
         </div>
       </div>
     </section>
- 
+
     <section class="container">
       <div class="featured-banner">
         <img src="feature.png" alt="Featured" class="featured-banner-img">
@@ -106,7 +144,7 @@
         </div>
       </div>
     </section>
- 
+
     <section class="container mb-16">
       <div class="grid-4">
 
@@ -152,16 +190,15 @@
 
       </div>
     </section>
- 
+
     <section class="big-text-section">
       <h2>WEAR YOUR STORY</h2>
     </section>
- 
+
     <section class="review-section">
       <h2 class="section-title text-center">What Our Customers Say</h2>
       <div class="marquee-container">
         <div class="marquee-track">
-          <!-- Card 1 -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -175,7 +212,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&auto=format&fit=crop" alt="Midnight Silk Dress" class="bought-item-img">
           </div>
-          <!-- Card 2 -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -189,7 +225,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1434389670869-c4147f15414f?w=100&auto=format&fit=crop" alt="Urban Chic Bomber" class="bought-item-img">
           </div>
-          <!-- Card 3 -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -203,7 +238,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1550614000-4b95d4edae1f?w=100&auto=format&fit=crop" alt="Classic White Blouse" class="bought-item-img">
           </div>
-          <!-- Card 4 -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -217,9 +251,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=100&auto=format&fit=crop" alt="Vintage Denim Jacket" class="bought-item-img">
           </div>
-          
-          <!-- Duplicate Cards for Infinite Scroll Effect -->
-          <!-- Card 1 Duplicate -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -233,7 +264,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&auto=format&fit=crop" alt="Midnight Silk Dress" class="bought-item-img">
           </div>
-          <!-- Card 2 Duplicate -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -247,7 +277,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1434389670869-c4147f15414f?w=100&auto=format&fit=crop" alt="Urban Chic Bomber" class="bought-item-img">
           </div>
-          <!-- Card 3 Duplicate -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -261,7 +290,6 @@
             </div>
             <img src="https://images.unsplash.com/photo-1550614000-4b95d4edae1f?w=100&auto=format&fit=crop" alt="Classic White Blouse" class="bought-item-img">
           </div>
-          <!-- Card 4 Duplicate -->
           <div class="review-card">
             <div class="review-content">
               <div class="review-header">
@@ -279,8 +307,8 @@
       </div>
     </section>
   </main>
- 
-  <footer>
+
+  <footer id="footer-contact">
     <div class="container">
       <div class="footer-grid minimal-footer">
         <div class="footer-col">
@@ -311,9 +339,7 @@
       </div>
     </div>
   </footer>
- 
- 
-  <!-- Login Modal -->
+
   <div id="login-modal" class="modal-overlay">
     <div class="modal-content" id="login-content">
       <button class="close-modal" id="close-login">
@@ -323,12 +349,12 @@
         </svg>
       </button>
       <div class="pixel-grid" id="pixel-grid"></div>
-      
+
       <div class="forms-wrapper" id="forms-wrapper">
         <div class="login-form-container hidden" id="login-form">
           <h2>Welcome Back</h2>
           <p>Sign in to access your Eshine account.</p>
-          
+
           <form>
             <div class="input-group">
               <label>Email</label>
@@ -340,7 +366,7 @@
             </div>
             <button type="submit" class="btn-black full-width">Sign In</button>
           </form>
-          
+
           <div class="modal-footer-links">
             <a href="#">Forgot password?</a>
             <a href="#" id="show-register">Create an account</a>
@@ -359,7 +385,7 @@
                 </svg>
               </button>
             </div>
-            
+
             <div class="avatar-popover hidden" id="avatar-popover">
               <p>Choose an Avatar</p>
               <div class="avatar-options">
@@ -375,7 +401,7 @@
               </label>
             </div>
           </div>
-          
+
           <form class="scrollable-form">
             <div class="form-grid">
               <div class="input-group">
@@ -387,7 +413,7 @@
                 <input type="tel" placeholder="+91 98765 43210" required>
               </div>
             </div>
-            
+
             <div class="input-group">
               <label>Email</label>
               <input type="email" placeholder="hello@eshine.com" required>
@@ -406,7 +432,7 @@
 
             <button type="submit" class="btn-black full-width" style="margin-top: 5px;">Create Account</button>
           </form>
-          
+
           <div class="modal-footer-links" style="justify-content: center; margin-top: 15px;">
             <a href="#" id="show-login">Already have an account? Sign in</a>
           </div>
@@ -417,6 +443,6 @@
 
   <script src="index.js"></script>
   <script src="chatbot/chatbot.js"></script>
- 
+
 </body>
 </html>
