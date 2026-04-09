@@ -505,8 +505,8 @@
         /* Editorial Hero Replacement */
         .editorial-landing {
             position: relative;
-            min-height: 100vh;
-            padding: 44px 32px;
+            min-height: auto;
+            padding: 28px 32px 12px;
             background: #ffffff;
             overflow: hidden;
         }
@@ -517,7 +517,7 @@
             width: min(1320px, 100%);
             margin: 0 auto;
             background: #ffffff;
-            min-height: calc(100vh - 88px);
+            min-height: auto;
             box-shadow: none;
             overflow: hidden;
         }
@@ -589,8 +589,12 @@
 
         .editorial-hero {
             position: relative;
-            min-height: 880px;
-            padding: 48px 48px 36px;
+            min-height: 820px;
+            padding: 48px 48px 20px;
+        }
+
+        .editorial-landing + .section-padding {
+            padding-top: 28px;
         }
 
         .editorial-word {
