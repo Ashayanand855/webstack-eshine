@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -18,35 +18,44 @@ import './index.css'
 // Context
 import { TryOnProvider } from './context/TryOnContext'
 
+function AppLayout() {
+  const location = useLocation()
+  const showGlobalHeader = location.pathname !== '/'
+
+  return (
+    <>
+      {showGlobalHeader ? <Header /> : null}
+
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/product" element={<ProductPage />} />
+          <Route path="/men" element={<MenPage />} />
+          <Route path="/women" element={<WomenPage />} />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/new-arrival" element={<NewArrivalsPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/account" element={<AccountPage />} />
+
+          <Route path="*" element={
+            <div className="container" style={{ textAlign: 'center', padding: '100px 0', minHeight: '50vh' }}>
+              <h2>Page under construction.</h2>
+              <p>Explore the <a href="/" style={{ color: '#000' }}>Home Page</a> instead.</p>
+            </div>
+          } />
+        </Routes>
+      </main>
+
+      <Footer />
+    </>
+  )
+}
+
 function App() {
   return (
     <TryOnProvider>
       <BrowserRouter>
-        {/* Global Header */}
-        <Header />
-        
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/product" element={<ProductPage />} />
-            <Route path="/men" element={<MenPage />} />
-            <Route path="/women" element={<WomenPage />} />
-            <Route path="/collections" element={<CollectionsPage />} />
-            <Route path="/new-arrival" element={<NewArrivalsPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            
-            <Route path="*" element={
-              <div className="container" style={{ textAlign: 'center', padding: '100px 0', minHeight: '50vh' }}>
-                <h2>Page under construction.</h2>
-                <p>Explore the <a href="/" style={{ color: '#000' }}>Home Page</a> instead.</p>
-              </div>
-            } />
-          </Routes>
-        </main>
-
-        {/* Global Footer */}
-        <Footer />
+        <AppLayout />
       </BrowserRouter>
     </TryOnProvider>
   )
