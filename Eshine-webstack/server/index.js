@@ -37,7 +37,7 @@ const getInventoryShortlist = (message, profile = {}) => {
   const styleKeywords = {
     formal: ['formal', 'office', 'meeting', 'blazer', 'party', 'cocktail', 'corporate', 'suit'],
     festive: ['wedding', 'festive', 'ethnic', 'sangeet', 'haldi', 'kurta', 'lehenga', 'traditional'],
-    casual: ['casual', 'college', 'everyday', 'relaxed', 'travel', 'brunch', 'comfortable'],
+    casual: ['casual', 'college', 'everyday', 'relaxed', 'travel', 'brunch', 'comfortable' , 'streetwear', 'winterwear'],
   }
 
   const categoryKeywords = {
@@ -45,6 +45,9 @@ const getInventoryShortlist = (message, profile = {}) => {
     ethnic: ['kurta', 'lehenga', 'sharara', 'anarkali', 'ethnic', 'traditional'],
     outerwear: ['hoodie', 'jacket', 'coat', 'sweater', 'sweatshirt'],
     dress: ['dress', 'gown'],
+    'bottom-wear': ['pant', 'pants', 'trouser', 'jeans', 'joggers', 'bottom', 'bottoms'],
+    footwear: ['shoe', 'shoes', 'sneaker', 'sneakers', 'footwear', 'kicks'],
+    'top-wear': ['shirt', 'tshirt', 't-shirt', 'top', 'tee'],
   }
 
   const inferMatch = (keywords) =>
@@ -99,7 +102,7 @@ app.post('/api/stylist-chat', async (req, res) => {
 
     if (!client) {
       return res.status(503).json({
-        error: 'AI provider is not configured. Add GEMINI_API_KEY or OPENAI_API_KEY in .env.',
+        error: 'AI provider is not working. Contact site Admin.',
       })
     }
 
@@ -112,7 +115,7 @@ app.post('/api/stylist-chat', async (req, res) => {
                 {
                   role: 'system',
                   content:
-                    'You are ESHINE Stylist, a fashion sales assistant. Recommend only from the provided inventory. Never invent products or prices. First line must be exactly in this format: PICKS: product-id-1, product-id-2, product-id-3. Then write a short Hinglish response explaining why these picks suit the event, plus one styling tip. If the request is too vague, still recommend best-fit inventory and ask one short follow-up question.',
+                    "You are ESHINE Stylist, a fashion sales assistant. Recommend ONLY from the provided inventory JSON. Never invent products. If the user asks for something we clearly don't have, or if none of the provided inventory items are remotely relevant to their request (e.g. asking for shoes when only shirts are provided), omit the PICKS line entirely and reply EXACTLY with: 'I am sorry we don't have those items in our catalog.' Otherwise, your first line MUST be exactly: PICKS: id1, id2, id3. Then write a short Hinglish response explaining why. Treat synonyms (shoes=sneakers, pants=joggers) as valid exact matches.",
                 },
                 {
                   role: 'user',
@@ -136,7 +139,7 @@ app.post('/api/stylist-chat', async (req, res) => {
                     {
                       type: 'input_text',
                       text:
-                        'You are ESHINE Stylist, a fashion sales assistant. Recommend only from the provided inventory. Never invent products or prices. First line must be exactly in this format: PICKS: product-id-1, product-id-2, product-id-3. Then write a short English response explaining why these picks suit the event, plus one styling tip. If the request is too vague, still recommend best-fit inventory and ask one short follow-up question.',
+                        "You are ESHINE Stylist, a fashion sales assistant. Recommend ONLY from the provided inventory JSON. Never invent products. If the user asks for something we clearly don't have, or if none of the provided inventory items are remotely relevant to their request (e.g. asking for shoes when only shirts are provided), omit the PICKS line entirely and reply EXACTLY with: 'I am sorry we don't have those items in our catalog.' Otherwise, your first line MUST be exactly: PICKS: id1, id2, id3. Then write a short English response explaining why. Treat synonyms (shoes=sneakers, pants=joggers) as valid exact matches.",
                     },
                   ],
                 },
@@ -163,10 +166,10 @@ app.post('/api/stylist-chat', async (req, res) => {
       .filter(Boolean)
       .slice(0, 3)
 
-      const suggestionIds = pickedIds?.length ? pickedIds : shortlist.slice(0, 3).map((item) => item.id)
-      const suggestions = suggestionIds
-        .map((id) => shortlist.find((item) => item.id === id))
-        .filter(Boolean)
+    const suggestionIds = picksMatch ? pickedIds : []
+    const suggestions = suggestionIds
+      .map((id) => shortlist.find((item) => item.id === id))
+      .filter(Boolean)
 
     const cleanedReply = outputText.replace(/^PICKS:\s*.+$/m, '').trim()
 

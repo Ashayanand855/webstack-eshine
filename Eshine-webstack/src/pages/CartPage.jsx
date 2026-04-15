@@ -22,8 +22,8 @@ const CartPage = () => {
   if (!cartItems.length) {
     return (
       <section className="container" style={{ padding: '80px 20px', minHeight: '60vh', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '32px', marginBottom: '20px' }}>Your Cart</h1>
-        <p style={{ color: '#666', marginBottom: '30px' }}>Your cart is currently empty.</p>
+        <h1 className="editorial-title" style={{ fontSize: 'clamp(40px, 8vw, 80px)', marginBottom: '20px' }}>Cart</h1>
+        <p className="editorial-subtitle" style={{ marginBottom: '30px' }}>Your cart is currently empty.</p>
         <Link to="/collections">
           <button className="btn-black" style={{ display: 'inline-block', width: 'auto' }}>Continue Shopping</button>
         </Link>
@@ -33,7 +33,9 @@ const CartPage = () => {
 
   return (
     <section className="container" style={{ padding: '56px 20px 80px', minHeight: '60vh' }}>
-      <h1 style={{ fontSize: '32px', marginBottom: '26px' }}>Your Cart</h1>
+      <div style={{ textAlign: 'center', margin: '40px 0 60px' }}>
+        <h1 className="editorial-title" style={{ fontSize: 'clamp(40px, 8vw, 80px)' }}>Cart</h1>
+      </div>
 
       <div className="cart-layout">
         <div className="cart-items-list">
@@ -49,9 +51,9 @@ const CartPage = () => {
               />
 
               <div>
-                <h3 style={{ marginBottom: '4px' }}>{item.name}</h3>
-                <p style={{ color: '#666', fontSize: '13px' }}>Size: {item.size} | Color: {item.color}</p>
-                <p style={{ marginTop: '8px', fontWeight: 600 }}>{item.price}</p>
+                <h3 style={{ marginBottom: '6px', fontSize: '18px', fontWeight: '500' }}>{item.name}</h3>
+                <p style={{ color: '#666', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px' }}>Size: {item.size} | Color: {item.color}</p>
+                <p style={{ marginTop: '12px', fontWeight: 600, fontSize: '16px' }}>{item.price}</p>
               </div>
 
               <div style={{ display: 'grid', alignContent: 'space-between', justifyItems: 'end' }}>
@@ -83,8 +85,8 @@ const CartPage = () => {
         </div>
 
         <aside className="cart-summary-card">
-          <h2 style={{ fontSize: '20px', marginBottom: '14px' }}>Order Summary</h2>
-          <div style={{ display: 'grid', gap: '10px', marginBottom: '14px' }}>
+          <h2 style={{ fontSize: '20px', marginBottom: '24px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Order Summary</h2>
+          <div style={{ display: 'grid', gap: '16px', marginBottom: '24px' }}>
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span>Subtotal</span>
               <span>{formatInr(subtotal)}</span>
@@ -93,7 +95,7 @@ const CartPage = () => {
               <span>Shipping</span>
               <span>{formatInr(shipping)}</span>
             </p>
-            <p style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, borderTop: '1px solid #e8e8e8', paddingTop: '10px' }}>
+            <p style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, borderTop: '1px solid #000', paddingTop: '16px', marginTop: '8px' }}>
               <span>Total</span>
               <span>{formatInr(total)}</span>
             </p>

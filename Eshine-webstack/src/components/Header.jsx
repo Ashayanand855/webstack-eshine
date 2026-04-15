@@ -22,36 +22,25 @@ const Header = () => {
 
   return (
     <>
-      <div className="top-bar">
-        <p>
-          {accountData.loggedIn
-            ? `Member access active for ${accountData.profile.firstName || 'Eshine User'}`
-            : 'Eshine'}
-        </p>
-      </div>
+      <header className="global-editorial-header">
+        <div className="editorial-topbar" style={{ backgroundColor: '#fff', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '24px', position: 'sticky', top: 0, zIndex: 100 }}>
+          <Link to="/" className="editorial-brand-link">E-SHINE</Link>
 
-      <header>
-        <div className="container header-content">
-          <Link to="/" className="logo-link">
-            <span className="logo-text">ESHINE</span>
-          </Link>
-
-          <nav className="nav-center">
+          <nav className="editorial-nav">
             <Link to="/new-arrival">New</Link>
             <Link to="/men">Men</Link>
             <Link to="/women">Women</Link>
             <Link to="/collections">Collections</Link>
           </nav>
 
-          <div className="nav-icons">
-            <Link to="/account" className="nav-icon-link nav-account-link" title="Account">
-              {accountData.loggedIn ? (
-                <span className="nav-account-status">{accountData.profile.firstName || 'Member'}</span>
-              ) : null}
+          <div className="editorial-actions">
+            <Link to="/account" className="editorial-top-link" style={{ marginRight: '15px' }}>
+              {accountData.loggedIn ? accountData.profile.firstName?.toUpperCase() || 'MEMBER' : 'AI STUDIO'} <span>→</span>
+            </Link>
+            <Link to="/account" className="nav-icon-link editorial-icon-link" title="Account">
               <User size={22} strokeWidth={1.8} />
             </Link>
-
-            <Link to="/cart" className="nav-icon-link" title="Cart">
+            <Link to="/cart" className="nav-icon-link editorial-icon-link" title="Cart">
               <ShoppingBag size={22} strokeWidth={1.8} />
             </Link>
           </div>

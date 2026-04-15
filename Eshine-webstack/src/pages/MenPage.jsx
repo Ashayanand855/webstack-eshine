@@ -6,9 +6,9 @@ const MenPage = () => {
   return (
     <div className="product-page-wrapper" style={{ minHeight: '80vh' }}>
       <section className="container">
-        <div style={{ textAlign: 'center', margin: '40px 0 60px' }}>
-          <h1 className="section-title" style={{ marginBottom: '10px' }}>Men's Collection</h1>
-          <p style={{ color: '#666', letterSpacing: '1px' }}>Explore the latest arrivals and editorial fits.</p>
+        <div style={{ textAlign: 'center', margin: '80px 0 80px' }}>
+          <h1 className="editorial-title">Men</h1>
+          <p className="editorial-subtitle">Explore the latest arrivals and editorial fits.</p>
         </div>
 
         <div className="grid-4" style={{ marginBottom: '80px' }}>
