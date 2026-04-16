@@ -13,15 +13,18 @@ const activeProvider = geminiApiKey ? 'gemini' : openAiApiKey ? 'openai' : null
 app.use(cors())
 app.use(express.json())
 
-const client =
-  activeProvider === 'gemini'
-    ? new OpenAI({
-        apiKey: geminiApiKey,
-        baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-      })
-    : activeProvider === 'openai'
-      ? new OpenAI({ apiKey: openAiApiKey })
-      : null
+const geminiClient = geminiApiKey
+  ? new OpenAI({
+      apiKey: geminiApiKey,
+      baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+    })
+  : null
+const openAiClient = openAiApiKey ? new OpenAI({ apiKey: openAiApiKey }) : null
+const providerCooldownUntil = {
+  gemini: 0,
+  openai: 0,
+}
+const PROVIDER_RETRY_AFTER_MS = 5 * 60 * 1000
 
 const normalize = (value = '') => value.toLowerCase()
 const escapeRegExp = (value = '') => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -210,10 +213,67 @@ const buildEnglishFallbackReply = (userMessage = '', suggestions = []) => {
   return `I picked ${namesText} from current ESHINE stock because they fit your ${occasion} request. Styling tip: keep one statement piece and the rest minimal for a polished look.`
 }
 
-const getInventoryShortlist = (message, profile = {}) => {
+const shuffle = (items = []) => {
+  const copy = [...items]
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy
+}
+
+const pickDiverseSuggestions = (products = [], count = 3) => {
+  if (products.length <= count) return products
+
+  const candidatePool = shuffle(products.slice(0, Math.min(products.length, 12)))
+  const selected = []
+  const usedCategories = new Set()
+  const usedStyles = new Set()
+
+  candidatePool.forEach((product) => {
+    if (selected.length >= count) return
+    const category = normalize(product.category)
+    const style = normalizeStyle(product.style)
+    const hasNewCategory = category && !usedCategories.has(category)
+    const hasNewStyle = style && !usedStyles.has(style)
+    if (selected.length === 0 || hasNewCategory || hasNewStyle) {
+      selected.push(product)
+      if (category) usedCategories.add(category)
+      if (style) usedStyles.add(style)
+    }
+  })
+
+  if (selected.length < count) {
+    candidatePool.forEach((product) => {
+      if (selected.length >= count) return
+      if (selected.some((picked) => picked.id === product.id)) return
+      selected.push(product)
+    })
+  }
+
+  return selected.slice(0, count)
+}
+
+const formatProviderError = (providerName = 'provider', error) => {
+  const status = error?.status || error?.response?.status
+  const message = error?.message || 'Unknown error'
+  return `${providerName} request failed${status ? ` (${status})` : ''}: ${message}`
+}
+
+const isProviderCoolingDown = (providerName) => Date.now() < providerCooldownUntil[providerName]
+
+const noteProviderFailure = (providerName, error) => {
+  const status = error?.status || error?.response?.status
+  if ([400, 401, 403, 429].includes(status)) {
+    providerCooldownUntil[providerName] = Date.now() + PROVIDER_RETRY_AFTER_MS
+  }
+}
+
+const getInventoryShortlist = (message, profile = {}, excludeProductIds = []) => {
   const text = normalize(message)
   const intentTags = extractIntentTags(message, profile?.styleProfile || profile)
   const requestedItems = detectRequestedItems(text)
+  const excludedIds = new Set((excludeProductIds || []).filter(Boolean))
   const desiredAudience = intentTags.has('women') ? 'women' : intentTags.has('men') ? 'men' : null
   const desiredStyle = ['festive', 'formal', 'casual', 'streetwear', 'winterwear'].find((tag) => intentTags.has(tag)) || null
   const desiredCategory = ['ethnic', 'formal', 'dress', 'outerwear', 'footwear', 'bottom-wear', 'top-wear']
@@ -249,9 +309,13 @@ const getInventoryShortlist = (message, profile = {}) => {
 
   const source = audienceMatched.length ? audienceMatched : positive
   if (!source.length) return []
+  const filteredSource = excludedIds.size
+    ? source.filter(({ product }) => !excludedIds.has(product.id))
+    : source
+  const workingSource = filteredSource.length ? filteredSource : source
 
   if (requestedItems.length <= 1) {
-    return source
+    return workingSource
       .map(({ product }) => product)
       .slice(0, 6)
   }
@@ -259,14 +323,14 @@ const getInventoryShortlist = (message, profile = {}) => {
   const selected = []
   const seen = new Set()
   requestedItems.forEach((requestedItem) => {
-    const match = source.find(({ product }) =>
+    const match = workingSource.find(({ product }) =>
       !seen.has(product.id) && productMatchesRequestedItem(product, requestedItem))
     if (!match) return
     selected.push(match.product)
     seen.add(match.product.id)
   })
 
-  const remaining = source
+  const remaining = workingSource
     .map(({ product }) => product)
     .filter((product) => !seen.has(product.id))
 
@@ -275,7 +339,8 @@ const getInventoryShortlist = (message, profile = {}) => {
 
 app.post('/api/stylist-chat', async (req, res) => {
   try {
-    const { message, accountProfile } = req.body || {}
+    const { message, accountProfile, excludeProductIds } = req.body || {}
+    const excludedIds = new Set((excludeProductIds || []).filter(Boolean))
 
     if (!message?.trim()) {
       return res.status(400).json({ error: 'Message is required.' })
@@ -290,7 +355,7 @@ app.post('/api/stylist-chat', async (req, res) => {
       })
     }
 
-    const shortlist = getInventoryShortlist(message, accountProfile?.styleProfile)
+    const shortlist = getInventoryShortlist(message, accountProfile?.styleProfile, excludeProductIds)
     if (!shortlist.length) {
       return res.json({
         reply: NO_MATCH_REPLY,
@@ -312,68 +377,76 @@ app.post('/api/stylist-chat', async (req, res) => {
       tags: product.tags ? product.tags.join(', ') : undefined,
     }))
 
-    if (!client) {
-      return res.status(503).json({
-        error: 'AI provider is not working. Contact site Admin.',
-      })
+    let outputText = ''
+    let usedProvider = activeProvider
+
+    if (geminiClient && !isProviderCoolingDown('gemini')) {
+      try {
+        outputText =
+          (
+            await geminiClient.chat.completions.create({
+              model: process.env.GEMINI_MODEL || 'gemini-2.0-flash',
+              messages: [
+                {
+                  role: 'system',
+                  content: STYLIST_SYSTEM_PROMPT,
+                },
+                {
+                  role: 'user',
+                  content: JSON.stringify({
+                    customer_request: message,
+                    profile: accountProfile,
+                    inventory: inventoryForPrompt,
+                  }),
+                },
+              ],
+            })
+          ).choices?.[0]?.message?.content?.trim() || ''
+        usedProvider = 'gemini'
+      } catch (providerError) {
+        console.error('Stylist provider fallback:', formatProviderError('Gemini', providerError))
+        noteProviderFailure('gemini', providerError)
+      }
     }
 
-    let outputText = ''
-    try {
-      outputText =
-        activeProvider === 'gemini'
-          ? (
-              await client.chat.completions.create({
-                model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
-                messages: [
-                  {
-                    role: 'system',
-                    content: STYLIST_SYSTEM_PROMPT,
-                  },
-                  {
-                    role: 'user',
-                    content: JSON.stringify({
-                      customer_request: message,
-                      profile: accountProfile,
-                      inventory: inventoryForPrompt,
-                    }),
-                  },
-                ],
-              })
-            ).choices?.[0]?.message?.content?.trim() || ''
-          : (
-              await client.responses.create({
-                model: process.env.OPENAI_MODEL || 'gpt-5',
-                reasoning: { effort: 'low' },
-                input: [
-                  {
-                    role: 'system',
-                    content: [
-                      {
-                        type: 'input_text',
-                        text: STYLIST_SYSTEM_PROMPT,
-                      },
-                    ],
-                  },
-                  {
-                    role: 'user',
-                    content: [
-                      {
-                        type: 'input_text',
-                        text: JSON.stringify({
-                          customer_request: message,
-                          profile: accountProfile,
-                          inventory: inventoryForPrompt,
-                        }),
-                      },
-                    ],
-                  },
-                ],
-              })
-            ).output_text?.trim() || ''
-    } catch (providerError) {
-      console.error('Stylist provider fallback:', providerError)
-      outputText = ''
+    if (!outputText && openAiClient && !isProviderCoolingDown('openai')) {
+      try {
+        outputText =
+          (
+            await openAiClient.responses.create({
+              model: process.env.OPENAI_MODEL || 'gpt-5',
+              reasoning: { effort: 'low' },
+              input: [
+                {
+                  role: 'system',
+                  content: [
+                    {
+                      type: 'input_text',
+                      text: STYLIST_SYSTEM_PROMPT,
+                    },
+                  ],
+                },
+                {
+                  role: 'user',
+                  content: [
+                    {
+                      type: 'input_text',
+                      text: JSON.stringify({
+                        customer_request: message,
+                        profile: accountProfile,
+                        inventory: inventoryForPrompt,
+                      }),
+                    },
+                  ],
+                },
+              ],
+            })
+          ).output_text?.trim() || ''
+        usedProvider = 'openai'
+      } catch (providerError) {
+        console.error('Stylist provider fallback:', formatProviderError('OpenAI', providerError))
+        noteProviderFailure('openai', providerError)
+      }
     }
     const picksMatch = outputText.match(/^PICKS:\s*(.+)$/m)
     const rawPicks = picksMatch?.[1]?.trim() || ''
@@ -384,9 +457,13 @@ app.post('/api/stylist-chat', async (req, res) => {
       .filter(Boolean)
       .filter((id) => !/^none$/i.test(id))
       .filter((id) => shortlistIds.has(id))
+      .filter((id) => !excludedIds.has(id))
       .slice(0, 3)
 
-    const suggestionIds = pickedIds?.length ? pickedIds : shortlist.slice(0, 3).map((item) => item.id)
+    const nonExcludedShortlist = shortlist.filter((item) => !excludedIds.has(item.id))
+    const fallbackPool = nonExcludedShortlist.length ? nonExcludedShortlist : shortlist
+    const fallbackSuggestions = pickDiverseSuggestions(fallbackPool, 3)
+    const suggestionIds = pickedIds?.length ? pickedIds : fallbackSuggestions.map((item) => item.id)
     const suggestions = suggestionIds
       .map((id) => shortlist.find((item) => item.id === id))
       .filter(Boolean)
@@ -402,7 +479,7 @@ app.post('/api/stylist-chat', async (req, res) => {
     return res.json({
       reply: finalReply || buildEnglishFallbackReply(message, suggestions),
       suggestions,
-      source: activeProvider,
+      source: outputText ? usedProvider : 'local',
     })
   } catch (error) {
     console.error('Stylist chat error:', error)
@@ -418,6 +495,10 @@ app.get('/api/health', (_, res) => {
     provider: activeProvider,
     gemini: Boolean(geminiApiKey),
     openai: Boolean(openAiApiKey),
+    providerCooldown: {
+      gemini: isProviderCoolingDown('gemini'),
+      openai: isProviderCoolingDown('openai'),
+    },
   })
 })
 

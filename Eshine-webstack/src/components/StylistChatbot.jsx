@@ -36,6 +36,11 @@ const StylistChatbot = ({ accountData }) => {
     setInput('')
     setIsLoading(true)
     setChatError('')
+    const recentSuggestionIds = messages
+      .flatMap((message) => message.suggestions || [])
+      .map((product) => product?.id)
+      .filter(Boolean)
+      .slice(-18)
 
     try {
       const response = await fetch(`${apiBaseUrl}/api/stylist-chat`, {
@@ -46,6 +51,7 @@ const StylistChatbot = ({ accountData }) => {
         body: JSON.stringify({
           message: promptText,
           accountProfile: accountData,
+          excludeProductIds: recentSuggestionIds,
         }),
       })
 
