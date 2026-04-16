@@ -106,6 +106,7 @@ const buildProductTags = (product = {}) => {
   if (product.style) tags.add(normalizeStyle(product.style))
   if (product.category) tags.add(normalize(product.category))
   ;(product.sections || []).map(normalize).forEach((tag) => tags.add(tag))
+  ;(product.tags || []).map(normalize).forEach((tag) => tags.add(tag))
   tokenize(product.name || '').forEach((token) => tags.add(token))
   const normalizedCategory = normalize(product.category)
   const normalizedName = normalize(product.name)
@@ -308,6 +309,7 @@ app.post('/api/stylist-chat', async (req, res) => {
       description: product.description,
       colors: product.colors?.map((color) => color.label).join(', '),
       sizes: product.sizes?.join(', '),
+      tags: product.tags ? product.tags.join(', ') : undefined,
     }))
 
     if (!client) {
@@ -322,7 +324,7 @@ app.post('/api/stylist-chat', async (req, res) => {
         activeProvider === 'gemini'
           ? (
               await client.chat.completions.create({
-                model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+                model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
                 messages: [
                   {
                     role: 'system',
